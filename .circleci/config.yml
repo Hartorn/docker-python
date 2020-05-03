@@ -16,7 +16,7 @@ executors:
         resource_class: medium
 jobs:
     build-docker-generic:
-        executor: engine-executor
+        executor: docker-executor
         parameters:
             python_version:
                 type: string
