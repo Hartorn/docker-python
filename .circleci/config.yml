@@ -13,7 +13,7 @@ executors:
             # environment:
             #   ENV_VAR: ENV_VALUE
         working_directory: /root/docker
-        resource_class: medium
+        resource_class: small
 jobs:
     build-docker-generic:
         executor: docker-executor
@@ -24,24 +24,38 @@ jobs:
             docker_type:
                 type: string
                 default: "cpu"
-
         steps:
             - checkout
             - setup_remote_docker
             - run:
-                name: Build image
-            #   docker login -u "$REGISTRY_LOGIN" -p "$REGISTRY_TOKEN"
+                name: Build and push image
                 command: |
-                    docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:3.7-cpu
+                    docker login -u "$DOCKERHUB_LOGIN" -p "$DOCKERHUB_TOKEN"
+                    docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
+                    docker push bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
 workflows:
     version: 2
     docker-python-build-3.7-cpu:
         jobs:
             - build-docker-generic:
+                context: dockerhub
                 python_version: "3.7"
                 docker_type: "cpu"
     docker-python-build-3.7-gpu:
         jobs:
             - build-docker-generic:
+                context: dockerhub
                 python_version: "3.7"
+                docker_type: "gpu"
+    docker-python-build-3.8-cpu:
+        jobs:
+            - build-docker-generic:
+                context: dockerhub
+                python_version: "3.8"
+                docker_type: "cpu"
+    docker-python-build-3.8-gpu:
+        jobs:
+            - build-docker-generic:
+                context: dockerhub
+                python_version: "3.8"
                 docker_type: "gpu"
