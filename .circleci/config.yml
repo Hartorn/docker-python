@@ -35,7 +35,7 @@ jobs:
                     docker push bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
 workflows:
     version: 2
-    docker-python-build-3.7-cpu:
+    docker-python-build-all:
         jobs:
             - build-docker-generic:
                 context: dockerhub
@@ -45,8 +45,6 @@ workflows:
                     branches:
                         only:
                             - master
-    docker-python-build-3.7-gpu:
-        jobs:
             - build-docker-generic:
                 context: dockerhub
                 python_version: "3.7"
@@ -55,8 +53,6 @@ workflows:
                     branches:
                         only:
                             - master
-    docker-python-build-3.8-cpu:
-        jobs:
             - build-docker-generic:
                 context: dockerhub
                 python_version: "3.8"
@@ -65,8 +61,6 @@ workflows:
                     branches:
                         only:
                             - master
-    docker-python-build-3.8-gpu:
-        jobs:
             - build-docker-generic:
                 context: dockerhub
                 python_version: "3.8"
