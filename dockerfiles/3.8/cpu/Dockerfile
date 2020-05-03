@@ -151,6 +151,13 @@ RUN set -ex; \
 
 
 
+# Adding useful packages for the image
+RUN apt update \
+&& apt install gcc g++ libgomp1 libopenblas-dev libomp-dev -y --no-install-recommends \
+&& apt autoclean \
+&& apt clean \
+&& rm -rf /var/lib/apt/lists/*
+
 # Adding MKL-DNN (now OneDNN) to the image
 RUN savedAptMark="$(apt-mark showmanual)" \
 && apt update \

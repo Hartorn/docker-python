@@ -58,6 +58,10 @@ for python_version in "3.7" "3.8"; do
             echo "" >>"${output_file}"
         fi
 
+        echo "# Adding useful packages for the image" >>"${output_file}"
+        apt_install_packages ${output_file} "${INSTALL_PACKAGES}"
+        echo "" >>"${output_file}"
+
         echo "Adding OneDNN to the dockerfile"
         echo "# Adding MKL-DNN (now OneDNN) to the image" >>"${output_file}"
         apt_install_temp_packages ${output_file} "${BUILD_PACKAGES}"
