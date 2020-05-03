@@ -32,7 +32,7 @@ jobs:
                 name: Build image
             #   docker login -u "$REGISTRY_LOGIN" -p "$REGISTRY_TOKEN"
                 command: |
-                docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:3.7-cpu
+                    docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:3.7-cpu
 workflows:
     version: 2
     docker-python-build-3.7-cpu:
