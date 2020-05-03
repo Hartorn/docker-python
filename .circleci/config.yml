@@ -41,21 +41,37 @@ workflows:
                 context: dockerhub
                 python_version: "3.7"
                 docker_type: "cpu"
+                filters:
+                    branches:
+                        only:
+                            - master
     docker-python-build-3.7-gpu:
         jobs:
             - build-docker-generic:
                 context: dockerhub
                 python_version: "3.7"
                 docker_type: "gpu"
+                filters:
+                    branches:
+                        only:
+                            - master
     docker-python-build-3.8-cpu:
         jobs:
             - build-docker-generic:
                 context: dockerhub
                 python_version: "3.8"
                 docker_type: "cpu"
+                filters:
+                    branches:
+                        only:
+                            - master
     docker-python-build-3.8-gpu:
         jobs:
             - build-docker-generic:
                 context: dockerhub
                 python_version: "3.8"
                 docker_type: "gpu"
+                filters:
+                    branches:
+                        only:
+                            - master
