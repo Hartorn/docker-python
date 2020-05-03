@@ -26,7 +26,7 @@ ONE_DNN_VERSION="v0.21.5"
 # From https://github.com/docker-library/python/
 # Here, we give link to raw content on github, on master
 
-for python_version in "3.7/buster/slim" "3.8/buster/slim"; do
+for python_version in "3.7" "3.8"; do
     for type in "cpu" "gpu"; do
         echo "Building Python ${python_version} for ${type}"
         folder="$(readlink -f "${BASH_SOURCE[0]}" | xargs dirname)/dockerfiles/${python_version}/${type}"

@@ -10,7 +10,7 @@ function install_python() {
     python_version=$2   
     # Creating temp folder and entering it
     temp_folder
-    source_url="https://raw.githubusercontent.com/docker-library/python/master/${python_version}/Dockerfile"
+    source_url="https://raw.githubusercontent.com/docker-library/python/master/${python_version}/buster/slim/Dockerfile"
     wget --quiet ${source_url}
     # Skip 6 first lines (comment)
     tail -n +6 Dockerfile >Dockerfile_trunc

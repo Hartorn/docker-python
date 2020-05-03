@@ -1,0 +1,47 @@
+ 
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+---
+version: 2.1    
+executors:
+    # here we can define an executor that will be shared across different jobs
+    docker-executor:
+        docker:
+        - image: docker:stable-dind
+            # environment:
+            #   ENV_VAR: ENV_VALUE
+        working_directory: /root/docker
+        resource_class: medium
+jobs:
+    build-docker-generic:
+        executor: engine-executor
+        parameters:
+            python_version:
+                type: string
+                default: "3.7"
+            docker_type:
+                type: string
+                default: "cpu"
+
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run:
+                name: Build image
+            #   docker login -u "$REGISTRY_LOGIN" -p "$REGISTRY_TOKEN"
+                command: |
+                docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:3.7-cpu
+workflows:
+    version: 2
+    docker-python-build-3.7-cpu:
+        jobs:
+            - build-docker-generic:
+                python_version: "3.7"
+                docker_type: "cpu"
+    docker-python-build-3.7-gpu:
+        jobs:
+            - build-docker-generic:
+                python_version: "3.7"
+                docker_type: "gpu"
