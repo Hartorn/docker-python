@@ -15,13 +15,13 @@ TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.1 libnvinfer-dev=6.0.1-1+cuda1
 
 # Not sure on this : should gcc and g++ be included ?
 # Useful for lot's of python install packages, let's go for yes
-INSTALL_PACKAGES="gcc g++ libgomp1 libopenblas-dev libomp-dev"
+INSTALL_PACKAGES="gcc g++ libgomp1 libopenblas-dev libomp-dev graphviz"
 
 # This are the temp package to install, when building packages or deps
 BUILD_PACKAGES="gcc g++ curl wget make cmake git gfortran"
 
 # MKL-DNN (or OneDNN now) version to use
-ONE_DNN_VERSION="v0.21.5"
+ONE_DNN_VERSION="v1.4"
 
 # From https://github.com/docker-library/python/
 # Here, we give link to raw content on github, on master
@@ -66,9 +66,13 @@ for python_version in "3.7" "3.8"; do
         echo "# Adding MKL-DNN (now OneDNN) to the image" >>"${output_file}"
         apt_install_temp_packages ${output_file} "${BUILD_PACKAGES}"
         echo "&& git clone https://github.com/01org/mkl-dnn.git -b ${ONE_DNN_VERSION} --depth 1 \\" >>"${output_file}"
-        echo "&& cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \\" >>"${output_file}"
-        echo "&& mkdir -p build && cd build && cmake .. && make \\" >>"${output_file}"
-        echo "&& make install \\" >>"${output_file}"
+        echo "&& cd mkl-dnn && mkdir -p build && cd build \\">>"${output_file}"
+        echo "&& cmake .. \\">>"${output_file}"
+        echo "&& make -j \\">>"${output_file}"
+        echo "&& make install \\">>"${output_file}"
+        # echo "&& cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \\" >>"${output_file}"
+        # echo "&& mkdir -p build && cd build && cmake .. && make \\" >>"${output_file}"
+        # echo "&& make install \\" >>"${output_file}"
         apt_clean_temp_packages ${output_file}
         echo "" >>"${output_file}"
         echo 'ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib' >>"${output_file}"

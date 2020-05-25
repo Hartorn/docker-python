@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.7/buster/slim/Dockerfile
 # Python: 3.7.7
-# Pip: 20.1
+# Pip: 20.1.1
 
 
 
@@ -82,6 +82,7 @@ RUN set -ex \
 		--with-system-ffi \
 		--without-ensurepip \
 	&& make -j "$(nproc)" \
+		LDFLAGS="-Wl,--strip-all" \
 # setting PROFILE_TASK makes "--enable-optimizations" reasonable: https://bugs.python.org/issue36044 / https://github.com/docker-library/python/issues/160#issuecomment-509426916
 		PROFILE_TASK='-m test.regrtest --pgo \
 			test_array \
@@ -151,10 +152,10 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.1
+ENV PYTHON_PIP_VERSION 20.1.1
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/1fe530e9e3d800be94e04f6428460fc4fb94f5a9/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 ce486cddac44e99496a702aa5c06c5028414ef48fdfd5242cd2fe559b13d4348
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/eff16c878c7fd6b688b9b4c4267695cf1a0bf01b/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 b3153ec0cf7b7bbf9556932aa37e4981c35dc2a2c501d70d91d2795aa532be79
 
 RUN set -ex; \
 	\
@@ -196,7 +197,7 @@ RUN apt update \
 
 # Adding useful packages for the image
 RUN apt update \
-&& apt install gcc g++ libgomp1 libopenblas-dev libomp-dev -y --no-install-recommends \
+&& apt install gcc g++ libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
@@ -205,9 +206,10 @@ RUN apt update \
 RUN savedAptMark="$(apt-mark showmanual)" \
 && apt update \
 && apt install gcc g++ curl wget make cmake git gfortran -y --no-install-recommends \
-&& git clone https://github.com/01org/mkl-dnn.git -b v0.21.5 --depth 1 \
-&& cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \
-&& mkdir -p build && cd build && cmake .. && make \
+&& git clone https://github.com/01org/mkl-dnn.git -b v1.4 --depth 1 \
+&& cd mkl-dnn && mkdir -p build && cd build \
+&& cmake .. \
+&& make -j \
 && make install \
 && apt-mark auto '.*' > /dev/null \
 && apt-mark manual $savedAptMark \
