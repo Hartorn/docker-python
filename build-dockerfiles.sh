@@ -21,7 +21,7 @@ INSTALL_PACKAGES="gcc g++ libgomp1 libopenblas-dev libomp-dev graphviz"
 BUILD_PACKAGES="gcc g++ curl wget make cmake git gfortran"
 
 # MKL-DNN (or OneDNN now) version to use
-ONE_DNN_VERSION="v1.4"
+ONE_DNN_VERSION="v0.21.5"
 
 # From https://github.com/docker-library/python/
 # Here, we give link to raw content on github, on master
@@ -64,13 +64,18 @@ for python_version in "3.7" "3.8"; do
 
         echo "Adding OneDNN to the dockerfile"
         echo "# Adding MKL-DNN (now OneDNN) to the image" >>"${output_file}"
-        apt_install_temp_packages ${output_file} "curl"
+        apt_install_temp_packages ${output_file} "${BUILD_PACKAGES}"
+        echo "&& git clone https://github.com/01org/mkl-dnn.git -b ${ONE_DNN_VERSION} --depth 1 \\" >>"${output_file}"
+        echo "&& cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \\" >>"${output_file}"
+        echo "&& mkdir -p build && cd build && cmake .. && make \\" >>"${output_file}"
+        echo "&& make install \\" >>"${output_file}"
+
         # https://github.com/oneapi-src/oneDNN/releases/download/v1.3/dnnl_lnx_1.3.0_cpu_gomp.tgz
-        echo "&& curl -L https://github.com/oneapi-src/oneDNN/releases/download/v1.3/dnnl_lnx_1.3.0_cpu_gomp.tgz -o dnnl.tgz \\" >>"${output_file}"
-        echo "&& tar zxvf dnnl.tgz \\" >>"${output_file}"
-        echo "&& mv dnnl_lnx_1.3.0_cpu_gomp/include/* /usr/local/include \\" >>"${output_file}"
-        echo "&& mv dnnl_lnx_1.3.0_cpu_gomp/lib/* /usr/local/lib \\" >>"${output_file}"
-        echo "&& rm dnnl.tgz && rm -r dnnl_lnx_1.3.0_cpu_gomp \\" >>"${output_file}"
+        # echo "&& curl -L https://github.com/oneapi-src/oneDNN/releases/download/v1.3/dnnl_lnx_1.3.0_cpu_gomp.tgz -o dnnl.tgz \\" >>"${output_file}"
+        # echo "&& tar zxvf dnnl.tgz \\" >>"${output_file}"
+        # echo "&& mv dnnl_lnx_1.3.0_cpu_gomp/include/* /usr/local/include \\" >>"${output_file}"
+        # echo "&& mv dnnl_lnx_1.3.0_cpu_gomp/lib/* /usr/local/lib \\" >>"${output_file}"
+        # echo "&& rm dnnl.tgz && rm -r dnnl_lnx_1.3.0_cpu_gomp \\" >>"${output_file}"
 
         # echo "&& git clone https://github.com/01org/mkl-dnn.git -b ${ONE_DNN_VERSION} --depth 1 \\" >>"${output_file}"
         # echo "&& cd mkl-dnn && mkdir -p build && cd build \\">>"${output_file}"
