@@ -18,7 +18,7 @@ TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.1 libnvinfer-dev=6.0.1-1+cuda1
 INSTALL_PACKAGES="gcc-8 g++-8 libgomp1 libopenblas-dev libomp-dev graphviz"
 
 # This are the temp package to install, when building packages or deps
-BUILD_PACKAGES="gcc-8 g++-8 curl wget make cmake git gfortran"
+BUILD_PACKAGES="make cmake git"
 
 # MKL-DNN (or OneDNN now) version to use
 ONE_DNN_VERSION="v0.21.5"
@@ -60,7 +60,16 @@ for python_version in "3.7" "3.8"; do
 
         echo "# Adding useful packages for the image" >>"${output_file}"
         apt_install_packages ${output_file} "${INSTALL_PACKAGES}"
+
         echo "" >>"${output_file}"
+        echo "# Making gcc 8 and g++ 8 default compiler" >>"${output_file}"
+
+        echo "RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 10 \\" >>"${output_file}"
+        echo "&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 10 \\" >>"${output_file}"
+        echo "&& update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 \\" >>"${output_file}"
+        echo "&& update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 " >>"${output_file}"
+        echo "" >>"${output_file}"
+
 
         echo "Adding OneDNN to the dockerfile"
         echo "# Adding MKL-DNN (now OneDNN) to the image" >>"${output_file}"
@@ -69,6 +78,7 @@ for python_version in "3.7" "3.8"; do
         echo "&& cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \\" >>"${output_file}"
         echo "&& mkdir -p build && cd build && cmake .. && make \\" >>"${output_file}"
         echo "&& make install \\" >>"${output_file}"
+        echo "&& cd ../.. && rm -rf mkl-dnn \\" >>"${output_file}"
 
         # https://github.com/oneapi-src/oneDNN/releases/download/v1.3/dnnl_lnx_1.3.0_cpu_gomp.tgz
         # echo "&& curl -L https://github.com/oneapi-src/oneDNN/releases/download/v1.3/dnnl_lnx_1.3.0_cpu_gomp.tgz -o dnnl.tgz \\" >>"${output_file}"

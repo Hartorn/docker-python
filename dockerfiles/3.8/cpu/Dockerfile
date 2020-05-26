@@ -159,14 +159,21 @@ RUN apt update \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
 
+# Making gcc 8 and g++ 8 default compiler
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 10 \
+&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 10 \
+&& update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 \
+&& update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 
+
 # Adding MKL-DNN (now OneDNN) to the image
 RUN savedAptMark="$(apt-mark showmanual)" \
 && apt update \
-&& apt install gcc-8 g++-8 curl wget make cmake git gfortran -y --no-install-recommends \
+&& apt install make cmake git -y --no-install-recommends \
 && git clone https://github.com/01org/mkl-dnn.git -b v0.21.5 --depth 1 \
 && cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \
 && mkdir -p build && cd build && cmake .. && make \
 && make install \
+&& cd ../.. && rm -rf mkl-dnn \
 && apt-mark auto '.*' > /dev/null \
 && apt-mark manual $savedAptMark \
 && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
