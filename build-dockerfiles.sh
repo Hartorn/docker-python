@@ -15,10 +15,10 @@ TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.1 libnvinfer-dev=6.0.1-1+cuda1
 
 # Not sure on this : should gcc and g++ be included ?
 # Useful for lot's of python install packages, let's go for yes
-INSTALL_PACKAGES="gcc g++ libgomp1 libopenblas-dev libomp-dev graphviz"
+INSTALL_PACKAGES="gcc-8 g++-8 libgomp1 libopenblas-dev libomp-dev graphviz"
 
 # This are the temp package to install, when building packages or deps
-BUILD_PACKAGES="gcc g++ curl wget make cmake git gfortran"
+BUILD_PACKAGES="gcc-8 g++-8 curl wget make cmake git gfortran"
 
 # MKL-DNN (or OneDNN now) version to use
 ONE_DNN_VERSION="v0.21.5"

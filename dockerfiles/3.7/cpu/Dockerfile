@@ -190,7 +190,7 @@ RUN set -ex; \
 
 # Adding useful packages for the image
 RUN apt update \
-&& apt install gcc g++ libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
+&& apt install gcc-8 g++-8 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
@@ -198,7 +198,7 @@ RUN apt update \
 # Adding MKL-DNN (now OneDNN) to the image
 RUN savedAptMark="$(apt-mark showmanual)" \
 && apt update \
-&& apt install gcc g++ curl wget make cmake git gfortran -y --no-install-recommends \
+&& apt install gcc-8 g++-8 curl wget make cmake git gfortran -y --no-install-recommends \
 && git clone https://github.com/01org/mkl-dnn.git -b v0.21.5 --depth 1 \
 && cd mkl-dnn/scripts && ./prepare_mkl.sh && cd .. \
 && mkdir -p build && cd build && cmake .. && make \
