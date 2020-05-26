@@ -169,12 +169,12 @@ RUN apt update \
 # Adding MKL-DNN (now OneDNN) to the image
 RUN savedAptMark="$(apt-mark showmanual)" \
 && apt update \
-&& apt install gcc g++ curl wget make cmake git gfortran -y --no-install-recommends \
-&& git clone https://github.com/01org/mkl-dnn.git -b v1.4 --depth 1 \
-&& cd mkl-dnn && mkdir -p build && cd build \
-&& cmake .. \
-&& make -j \
-&& make install \
+&& apt install curl -y --no-install-recommends \
+&& curl -L https://github.com/oneapi-src/oneDNN/releases/download/v1.3/dnnl_lnx_1.3.0_cpu_gomp.tgz -o dnnl.tgz \
+&& tar zxvf dnnl.tgz \
+&& mv dnnl_lnx_1.3.0_cpu_gomp/include/* /usr/local/include \
+&& mv dnnl_lnx_1.3.0_cpu_gomp/lib/* /usr/local/lib \
+&& rm dnnl.tgz && rm -r dnnl_lnx_1.3.0_cpu_gomp \
 && apt-mark auto '.*' > /dev/null \
 && apt-mark manual $savedAptMark \
 && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
