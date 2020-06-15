@@ -9,9 +9,9 @@ set -e
 # For now, it will be ubuntu 18.04
 declare -A config_from_type
 config_from_type["cpu"]='ubuntu:18.04@sha256:3235326357dfb65f1781dbc4df3b834546d8bf914e82cce58e6e6b676e23ce8f'
-config_from_type["gpu"]='nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04@sha256:557de4ba2cb674029ffb602bed8f748d44d59bb7db9daa746ea72a102406d3ec'
+config_from_type["gpu"]='nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:d3f5d6e8fe105dadb55aef7c80191d6281bbd18989a05124b108b7c8a522a5ad'
 
-TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.1 libnvinfer-dev=6.0.1-1+cuda10.1 libnvinfer-plugin6=6.0.1-1+cuda10.1 libnvinfer-plugin-dev=6.0.1-1+cuda10.1"
+TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda10.2 libnvinfer-plugin6=6.0.1-1+cuda10.2 libnvinfer-plugin-dev=6.0.1-1+cuda10.2"
 
 # Not sure on this : should gcc and g++ be included ?
 # Useful for lot's of python install packages, let's go for yes

@@ -154,7 +154,7 @@ RUN set -ex; \
 
 # Installing TensorRT for cuda 10.1
 RUN apt update \
-&& apt install libnvinfer6=6.0.1-1+cuda10.1 libnvinfer-dev=6.0.1-1+cuda10.1 libnvinfer-plugin6=6.0.1-1+cuda10.1 libnvinfer-plugin-dev=6.0.1-1+cuda10.1 -y --no-install-recommends \
+&& apt install libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda10.2 libnvinfer-plugin6=6.0.1-1+cuda10.2 libnvinfer-plugin-dev=6.0.1-1+cuda10.2 -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
