@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:d3f5d6e8fe105dadb55aef7c80191d6281bbd18989a05124b108b7c8a522a5ad
+FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:28e9fbacfd7c90a591cf5dceb30c1f35cc2a1a02f9fa225a9a1491526846b604
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
