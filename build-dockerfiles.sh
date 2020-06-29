@@ -8,8 +8,8 @@ set -e
 # We want same base version with, or without cuda
 # For now, it will be ubuntu 18.04
 declare -A config_from_type
-config_from_type["cpu"]='ubuntu:18.04@sha256:3235326357dfb65f1781dbc4df3b834546d8bf914e82cce58e6e6b676e23ce8f'
-config_from_type["gpu"]='nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:d3f5d6e8fe105dadb55aef7c80191d6281bbd18989a05124b108b7c8a522a5ad'
+config_from_type["cpu"]='ubuntu:18.04@sha256:86510528ab9cd7b64209cbbe6946e094a6d10c6db21def64a93ebdd20011de1d'
+config_from_type["gpu"]='nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:28e9fbacfd7c90a591cf5dceb30c1f35cc2a1a02f9fa225a9a1491526846b604'
 
 TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda10.2 libnvinfer-plugin6=6.0.1-1+cuda10.2 libnvinfer-plugin-dev=6.0.1-1+cuda10.2"
 

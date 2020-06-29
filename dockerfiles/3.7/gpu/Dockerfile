@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:d3f5d6e8fe105dadb55aef7c80191d6281bbd18989a05124b108b7c8a522a5ad
+FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:28e9fbacfd7c90a591cf5dceb30c1f35cc2a1a02f9fa225a9a1491526846b604
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.7/buster/slim/Dockerfile
-# Python: 3.7.7
+# Python: 3.7.8
 # Pip: 20.1.1
 
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
-ENV PYTHON_VERSION 3.7.7
+ENV PYTHON_VERSION 3.7.8
 
 RUN set -ex \
 	\
