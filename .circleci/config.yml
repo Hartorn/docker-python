@@ -71,7 +71,7 @@ workflows:
                             - master
             - build-docker-generic:
                 context: dockerhub
-                python_version: "3.9"
+                python_version: "3.9-rc"
                 docker_type: "cpu"
                 filters:
                     branches:
@@ -79,7 +79,7 @@ workflows:
                             - master
             - build-docker-generic:
                 context: dockerhub
-                python_version: "3.9"
+                python_version: "3.9-rc"
                 docker_type: "gpu"
                 filters:
                     branches:
