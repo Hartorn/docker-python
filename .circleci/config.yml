@@ -69,3 +69,19 @@ workflows:
                     branches:
                         only:
                             - master
+            - build-docker-generic:
+                context: dockerhub
+                python_version: "3.9"
+                docker_type: "cpu"
+                filters:
+                    branches:
+                        only:
+                            - master
+            - build-docker-generic:
+                context: dockerhub
+                python_version: "3.9"
+                docker_type: "gpu"
+                filters:
+                    branches:
+                        only:
+                            - master

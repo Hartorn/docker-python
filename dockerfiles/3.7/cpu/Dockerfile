@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM ubuntu:18.04@sha256:86510528ab9cd7b64209cbbe6946e094a6d10c6db21def64a93ebdd20011de1d
+FROM ubuntu:20.04@sha256:31dfb10d52ce76c5ca0aa19d10b3e6424b830729e32a89a7c6eee2cda2be67a5
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,8 +9,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.7/buster/slim/Dockerfile
-# Python: 3.7.8
-# Pip: 20.1.1
+# Python: 3.7.9
+# Pip: 20.2.2
 
 
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
-ENV PYTHON_VERSION 3.7.8
+ENV PYTHON_VERSION 3.7.9
 
 RUN set -ex \
 	\
@@ -120,6 +120,15 @@ RUN set -ex \
 			test_unicode \
 		' \
 	&& make install \
+	&& rm -rf /usr/src/python \
+	\
+	&& find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name '*.a' \) \) \
+			-o \( -type f -a -name 'wininst-*.exe' \) \
+		\) -exec rm -rf '{}' + \
+	\
 	&& ldconfig \
 	\
 	&& apt-mark auto '.*' > /dev/null \
@@ -134,14 +143,6 @@ RUN set -ex \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
 	&& rm -rf /var/lib/apt/lists/* \
 	\
-	&& find /usr/local -depth \
-		\( \
-			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \
-			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-		\) -exec rm -rf '{}' + \
-	&& rm -rf /usr/src/python \
-	\
 	&& python3 --version
 
 # make some useful symlinks that are expected to exist
@@ -152,10 +153,10 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.1.1
+ENV PYTHON_PIP_VERSION 20.2.2
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/eff16c878c7fd6b688b9b4c4267695cf1a0bf01b/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 b3153ec0cf7b7bbf9556932aa37e4981c35dc2a2c501d70d91d2795aa532be79
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/5578af97f8b2b466f4cdbebe18a3ba2d48ad1434/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 d4d62a0850fe0c2e6325b2cc20d818c580563de5a2038f917e3cb0e25280b4d1
 
 RUN set -ex; \
 	\
@@ -188,16 +189,18 @@ RUN set -ex; \
 
 
 
+# Adding NVidia Ml repo
+RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
 # Adding useful packages for the image
 RUN apt update \
-&& apt install gcc-8 g++-8 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
+&& apt install gcc-10 g++-10 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
 
-# Making gcc 8 and g++ 8 default compiler
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 10 \
-&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 10 \
+# Making gcc 10 and g++ 10 default compiler
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 \
+&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 10 \
 && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 \
 && update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 
 

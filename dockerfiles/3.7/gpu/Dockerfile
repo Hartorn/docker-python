@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:28e9fbacfd7c90a591cf5dceb30c1f35cc2a1a02f9fa225a9a1491526846b604
+FROM nvidia/cuda:11.0-devel-ubuntu20.04@sha256:0fe0406ec4e456ae682226751434bdd7e9b729a03067d795f9b34c978772b515
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,8 +9,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.7/buster/slim/Dockerfile
-# Python: 3.7.8
-# Pip: 20.1.1
+# Python: 3.7.9
+# Pip: 20.2.2
 
 
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
-ENV PYTHON_VERSION 3.7.8
+ENV PYTHON_VERSION 3.7.9
 
 RUN set -ex \
 	\
@@ -120,6 +120,15 @@ RUN set -ex \
 			test_unicode \
 		' \
 	&& make install \
+	&& rm -rf /usr/src/python \
+	\
+	&& find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name '*.a' \) \) \
+			-o \( -type f -a -name 'wininst-*.exe' \) \
+		\) -exec rm -rf '{}' + \
+	\
 	&& ldconfig \
 	\
 	&& apt-mark auto '.*' > /dev/null \
@@ -134,14 +143,6 @@ RUN set -ex \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
 	&& rm -rf /var/lib/apt/lists/* \
 	\
-	&& find /usr/local -depth \
-		\( \
-			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-			-o \
-			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-		\) -exec rm -rf '{}' + \
-	&& rm -rf /usr/src/python \
-	\
 	&& python3 --version
 
 # make some useful symlinks that are expected to exist
@@ -152,10 +153,10 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.1.1
+ENV PYTHON_PIP_VERSION 20.2.2
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/eff16c878c7fd6b688b9b4c4267695cf1a0bf01b/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 b3153ec0cf7b7bbf9556932aa37e4981c35dc2a2c501d70d91d2795aa532be79
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/5578af97f8b2b466f4cdbebe18a3ba2d48ad1434/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 d4d62a0850fe0c2e6325b2cc20d818c580563de5a2038f917e3cb0e25280b4d1
 
 RUN set -ex; \
 	\
@@ -188,23 +189,31 @@ RUN set -ex; \
 
 
 
+# Adding NVidia Ml repo
+RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
+
+# Adding CUDNN
+ENV CUDNN_VERSION 8.0.2.39
+LABEL com.nvidia.cudnn.version=""
+RUN apt-get update && apt-get install -y --no-install-recommends  libcudnn8=$CUDNN_VERSION-1+cuda11.0 libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && apt-mark hold libcudnn8 && rm -rf /var/lib/apt/lists/*
+
 # Installing TensorRT for cuda 10.1
 RUN apt update \
-&& apt install libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda10.2 libnvinfer-plugin6=6.0.1-1+cuda10.2 libnvinfer-plugin-dev=6.0.1-1+cuda10.2 -y --no-install-recommends \
+&& apt install libnvinfer7=7.1.3-1+cuda11.0 libnvinfer-dev=7.1.3-1+cuda11.0 libnvinfer-plugin7=7.1.3-1+cuda11.0 libnvinfer-plugin-dev=7.1.3-1+cuda11.0 -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
 
 # Adding useful packages for the image
 RUN apt update \
-&& apt install gcc-8 g++-8 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
+&& apt install gcc-10 g++-10 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
 
-# Making gcc 8 and g++ 8 default compiler
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 10 \
-&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 10 \
+# Making gcc 10 and g++ 10 default compiler
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 \
+&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 10 \
 && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 \
 && update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 
 
