@@ -83,7 +83,7 @@ RUN set -ex \
 		--without-ensurepip \
 	&& make -j "$(nproc)" \
 		LDFLAGS="-Wl,--strip-all" \
-	&& make install \
+	&& make install && cd /usr/local \
 	&& rm -rf /usr/src/python \
 	\
 	&& find /usr/local -depth \

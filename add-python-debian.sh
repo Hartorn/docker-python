@@ -18,6 +18,8 @@ function install_python() {
     sed -ie 's/^CMD .*$//g' Dockerfile_trunc
     # Remove FROM
     sed -ie 's/^FROM .*$//g' Dockerfile_trunc
+    # Cd to a folder to avoid weird error in CI
+    sed -ie 's/make install/make install \&\& cd \/usr\/local/' Dockerfile_trunc
 
     # Comment under are to keep this version
     PYTHON_PRECISE_VERSION=$(cat Dockerfile_trunc | grep 'ENV PYTHON_VERSION' | sed -e 's/ENV PYTHON_VERSION \(.*\)$/\1/g')
