@@ -45,12 +45,13 @@ for python_version in "3.7" "3.8" "3.9-rc"; do
         echo "Getting Python build from source from official dockerfile in Github"
         echo "# Adding Python to image" >>"${output_file}"
         install_python ${output_file} ${python_version}
-        echo '' >>"${output_file}"
-        echo "# Adding NVidia Ml repo" >>"${output_file}"
  
-        echo 'RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list' >>"${output_file}"
         # Adding TensorRT if it's cuda image
         if [ "$type" == "gpu" ]; then
+            echo "" >>"${output_file}"
+            echo "# Adding Nvidia ML repo" >>"${output_file}"
+            echo 'RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list' >>"${output_file}"
+            echo 'RUN wget -qO - https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub | sudo apt-key add -' >>"${output_file}"
 
             echo "" >>"${output_file}"
             echo "Adding CUDNN"

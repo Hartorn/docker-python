@@ -152,8 +152,9 @@ RUN set -ex; \
 
 
 
-# Adding NVidia Ml repo
+# Adding Nvidia ML repo
 RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
+RUN wget -qO - https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub | sudo apt-key add -
 
 # Adding CUDNN
 ENV CUDNN_VERSION 8.0.2.39

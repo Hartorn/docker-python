@@ -152,9 +152,6 @@ RUN set -ex; \
 	rm -f get-pip.py
 
 
-
-# Adding NVidia Ml repo
-RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
 # Adding useful packages for the image
 RUN apt update \
 && apt install gcc-10 g++-10 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
