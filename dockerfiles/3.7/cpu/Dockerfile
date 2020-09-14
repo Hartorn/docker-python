@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM ubuntu:20.04@sha256:31dfb10d52ce76c5ca0aa19d10b3e6424b830729e32a89a7c6eee2cda2be67a5
+FROM ubuntu:18.04@sha256:3235326357dfb65f1781dbc4df3b834546d8bf914e82cce58e6e6b676e23ce8f
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,8 +9,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.7/buster/slim/Dockerfile
-# Python: 3.7.9
-# Pip: 20.2.2
+# Python: 3.7.7
+# Pip: 20.1.1
 
 
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
-ENV PYTHON_VERSION 3.7.9
+ENV PYTHON_VERSION 3.7.7
 
 RUN set -ex \
 	\
