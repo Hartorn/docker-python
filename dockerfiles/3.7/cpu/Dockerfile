@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM ubuntu:18.04@sha256:3235326357dfb65f1781dbc4df3b834546d8bf914e82cce58e6e6b676e23ce8f
+FROM ubuntu:18.04@sha256:05a58ded9a2c792598e8f4aa8ffe300318eac6f294bf4f49a7abae7544918592
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,8 +9,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.7/buster/slim/Dockerfile
-# Python: 3.7.7
-# Pip: 20.1.1
+# Python: 3.7.9
+# Pip: 20.2.3
 
 
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
-ENV PYTHON_VERSION 3.7.7
+ENV PYTHON_VERSION 3.7.9
 
 RUN set -ex \
 	\
@@ -153,10 +153,10 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.2.2
+ENV PYTHON_PIP_VERSION 20.2.3
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/5578af97f8b2b466f4cdbebe18a3ba2d48ad1434/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 d4d62a0850fe0c2e6325b2cc20d818c580563de5a2038f917e3cb0e25280b4d1
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 6e0bb0a2c2533361d7f297ed547237caf1b7507f197835974c0dd7eba998c53c
 
 RUN set -ex; \
 	\

@@ -1,6 +1,6 @@
 # DO NOT MODIFY MANUALLY
 # GENERATED FROM SCRIPTS
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:d3f5d6e8fe105dadb55aef7c80191d6281bbd18989a05124b108b7c8a522a5ad
+FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:6a3ef37f5d0810b4ffcb0b3f2e30826377fd652418d2b3bd13e531b99ec4ec31
 
 # Avoid tzdata interactive action
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Dockerfile generated fragment to install Python and Pip
 # Source: https://raw.githubusercontent.com/docker-library/python/master/3.8/buster/slim/Dockerfile
 # Python: 3.8.5
-# Pip: 20.2.2
+# Pip: 20.2.3
 
 
 
@@ -117,10 +117,10 @@ RUN cd /usr/local/bin \
 	&& ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.2.2
+ENV PYTHON_PIP_VERSION 20.2.3
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/5578af97f8b2b466f4cdbebe18a3ba2d48ad1434/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 d4d62a0850fe0c2e6325b2cc20d818c580563de5a2038f917e3cb0e25280b4d1
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 6e0bb0a2c2533361d7f297ed547237caf1b7507f197835974c0dd7eba998c53c
 
 RUN set -ex; \
 	\

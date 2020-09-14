@@ -4,84 +4,84 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 ---
-version: 2.1    
-executors:
-    # here we can define an executor that will be shared across different jobs
-    docker-executor:
-        docker:
-        - image: docker:stable-dind
-            # environment:
-            #   ENV_VAR: ENV_VALUE
-        working_directory: /root/docker
-        resource_class: small
-jobs:
-    build-docker-generic:
-        executor: docker-executor
-        parameters:
-            python_version:
-                type: string
-                default: "3.7"
-            docker_type:
-                type: string
-                default: "cpu"
-        steps:
-            - checkout
-            - setup_remote_docker
-            - run:
-                name: Build and push image
-                command: |
-                    docker login -u "$DOCKERHUB_LOGIN" -p "$DOCKERHUB_TOKEN"
-                    docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
-                    docker push bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
-workflows:
-    version: 2
-    docker-python-build-all:
-        jobs:
-            - build-docker-generic:
-                context: dockerhub
-                python_version: "3.7"
-                docker_type: "cpu"
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build-docker-generic:
-                context: dockerhub
-                python_version: "3.7"
-                docker_type: "gpu"
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build-docker-generic:
-                context: dockerhub
-                python_version: "3.8"
-                docker_type: "cpu"
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build-docker-generic:
-                context: dockerhub
-                python_version: "3.8"
-                docker_type: "gpu"
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build-docker-generic:
-                context: dockerhub
-                python_version: "3.9-rc"
-                docker_type: "cpu"
-                filters:
-                    branches:
-                        only:
-                            - master
-            - build-docker-generic:
-                context: dockerhub
-                python_version: "3.9-rc"
-                docker_type: "gpu"
-                filters:
-                    branches:
-                        only:
-                            - master
+    version: 2.1    
+    executors:
+        # here we can define an executor that will be shared across different jobs
+        docker-executor:
+            docker:
+            - image: docker:stable-dind
+                # environment:
+                #   ENV_VAR: ENV_VALUE
+            working_directory: /root/docker
+            resource_class: small
+    jobs:
+        build-docker-generic:
+            executor: docker-executor
+            parameters:
+                python_version:
+                    type: string
+                    default: "3.7"
+                docker_type:
+                    type: string
+                    default: "cpu"
+            steps:
+                - checkout
+                - setup_remote_docker
+                - run:
+                    name: Build and push image
+                    command: |
+                        docker login -u "$DOCKERHUB_LOGIN" -p "$DOCKERHUB_TOKEN"
+                        docker build ./dockerfiles/<< parameters.python_version >>/<< parameters.docker_type >>/ -t bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
+                        docker push bazire/python:<< parameters.python_version >>-<< parameters.docker_type >>
+    workflows:
+        version: 2
+        docker-python-build-all:
+            jobs:
+                - build-docker-generic:
+                    context: dockerhub
+                    python_version: "3.7"
+                    docker_type: "cpu"
+                    filters:
+                        branches:
+                            only:
+                                - master
+                - build-docker-generic:
+                    context: dockerhub
+                    python_version: "3.7"
+                    docker_type: "gpu"
+                    filters:
+                        branches:
+                            only:
+                                - master
+                - build-docker-generic:
+                    context: dockerhub
+                    python_version: "3.8"
+                    docker_type: "cpu"
+                    filters:
+                        branches:
+                            only:
+                                - master
+                - build-docker-generic:
+                    context: dockerhub
+                    python_version: "3.8"
+                    docker_type: "gpu"
+                    filters:
+                        branches:
+                            only:
+                                - master
+                - build-docker-generic:
+                    context: dockerhub
+                    python_version: "3.9-rc"
+                    docker_type: "cpu"
+                    filters:
+                        branches:
+                            only:
+                                - master
+                - build-docker-generic:
+                    context: dockerhub
+                    python_version: "3.9-rc"
+                    docker_type: "gpu"
+                    filters:
+                        branches:
+                            only:
+                                - master
