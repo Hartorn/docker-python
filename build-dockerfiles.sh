@@ -11,7 +11,7 @@ declare -A config_from_type
 config_from_type["cpu"]='ubuntu:18.04@sha256:05a58ded9a2c792598e8f4aa8ffe300318eac6f294bf4f49a7abae7544918592'
 config_from_type["gpu"]='nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04@sha256:6a3ef37f5d0810b4ffcb0b3f2e30826377fd652418d2b3bd13e531b99ec4ec31'
 
-TENSORT_RT_6_PACKAGES="libnvinfer7=7.1.3-1+cuda11.0 libnvinfer-dev=7.1.3-1+cuda11.0 libnvinfer-plugin7=7.1.3-1+cuda11.0 libnvinfer-plugin-dev=7.1.3-1+cuda11.0"
+TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda10.2 libnvinfer-plugin6=6.0.1-1+cuda10.2 libnvinfer-plugin-dev=6.0.1-1+cuda10.2"
 
 # Not sure on this : should gcc and g++ be included ?
 # Useful for lot's of python install packages, let's go for yes
@@ -49,22 +49,22 @@ for python_version in "3.7" "3.8" "3.9-rc"; do
         # Adding TensorRT if it's cuda image
         if [ "$type" == "gpu" ]; then
             echo "" >>"${output_file}"
-            echo "# Adding Nvidia ML repo" >>"${output_file}"
+            # echo "# Adding Nvidia ML repo" >>"${output_file}"
             
-            echo 'RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list' >>"${output_file}"
-            apt_install_temp_packages ${output_file} "wget"
-            echo '&& wget -qO - https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - \' >>"${output_file}"
-            apt_clean_temp_packages ${output_file}
-            echo "" >>"${output_file}"
+            # echo 'RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list' >>"${output_file}"
+            # apt_install_temp_packages ${output_file} "wget"
+            # echo '&& wget -qO - https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - \' >>"${output_file}"
+            # apt_clean_temp_packages ${output_file}
+            # echo "" >>"${output_file}"
 
-            echo "" >>"${output_file}"
-            echo "Adding CUDNN"
+            # echo "" >>"${output_file}"
+            # echo "Adding CUDNN"
 
-            echo "# Adding CUDNN" >>"${output_file}"
-            echo "ENV CUDNN_VERSION 8.0.2.39" >>"${output_file}"
-            echo "LABEL com.nvidia.cudnn.version=\"${CUDNN_VERSION}\"" >>"${output_file}"
-            echo 'RUN apt-get update && apt-get install -y --no-install-recommends  libcudnn8=$CUDNN_VERSION-1+cuda11.0 libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && apt-mark hold libcudnn8 && rm -rf /var/lib/apt/lists/*' >>"${output_file}"
-            echo "" >>"${output_file}"
+            # echo "# Adding CUDNN" >>"${output_file}"
+            # echo "ENV CUDNN_VERSION 8.0.2.39" >>"${output_file}"
+            # echo "LABEL com.nvidia.cudnn.version=\"${CUDNN_VERSION}\"" >>"${output_file}"
+            # echo 'RUN apt-get update && apt-get install -y --no-install-recommends  libcudnn8=$CUDNN_VERSION-1+cuda11.0 libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && apt-mark hold libcudnn8 && rm -rf /var/lib/apt/lists/*' >>"${output_file}"
+            # echo "" >>"${output_file}"
 
             echo "Adding TensorRT support"
             # Looks like ML CUDA is already installed

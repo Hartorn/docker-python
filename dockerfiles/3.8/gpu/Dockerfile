@@ -153,28 +153,9 @@ RUN set -ex; \
 
 
 
-# Adding Nvidia ML repo
-RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
-RUN savedAptMark="$(apt-mark showmanual)" \
-&& apt update \
-&& apt install wget -y --no-install-recommends \
-&& wget -qO - https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - \
-&& apt-mark auto '.*' > /dev/null \
-&& apt-mark manual $savedAptMark \
-&& apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-&& apt autoclean \
-&& apt clean \
-&& rm -rf /var/lib/apt/lists/*
-
-
-# Adding CUDNN
-ENV CUDNN_VERSION 8.0.2.39
-LABEL com.nvidia.cudnn.version=""
-RUN apt-get update && apt-get install -y --no-install-recommends  libcudnn8=$CUDNN_VERSION-1+cuda11.0 libcudnn8-dev=$CUDNN_VERSION-1+cuda11.0 && apt-mark hold libcudnn8 && rm -rf /var/lib/apt/lists/*
-
 # Installing TensorRT for cuda 10.1
 RUN apt update \
-&& apt install libnvinfer7=7.1.3-1+cuda11.0 libnvinfer-dev=7.1.3-1+cuda11.0 libnvinfer-plugin7=7.1.3-1+cuda11.0 libnvinfer-plugin-dev=7.1.3-1+cuda11.0 -y --no-install-recommends \
+&& apt install libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda10.2 libnvinfer-plugin6=6.0.1-1+cuda10.2 libnvinfer-plugin-dev=6.0.1-1+cuda10.2 -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
