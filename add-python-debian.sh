@@ -37,6 +37,7 @@ function install_python() {
     # Now, to avoid GPG problems
     # https://github.com/f-secure-foundry/usbarmory-debian-base_image/issues/9
     sed -i 's/^\(.*&&.*export GNUPGHOME="$(mktemp -d)" \)/\1\\\n# Fix to avoid GPG server problem\n\t\&\& echo "disable-ipv6" >> ${GNUPGHOME}\/dirmngr.conf /' "${output_file}"
+    sed -i "s/ -o -name '\*\.a' / /" "${output_file}"
 
     # Exiting temp folder and removing it
     cleanup_folder
