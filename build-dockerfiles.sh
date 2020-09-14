@@ -15,7 +15,7 @@ TENSORT_RT_6_PACKAGES="libnvinfer6=6.0.1-1+cuda10.2 libnvinfer-dev=6.0.1-1+cuda1
 
 # Not sure on this : should gcc and g++ be included ?
 # Useful for lot's of python install packages, let's go for yes
-INSTALL_PACKAGES="gcc-10 g++-10 libgomp1 libopenblas-dev libomp-dev graphviz"
+INSTALL_PACKAGES="gcc-8 g++-8 libgomp1 libopenblas-dev libomp-dev graphviz"
 
 # This are the temp package to install, when building packages or deps
 BUILD_PACKAGES="make curl wget cmake git"
@@ -76,15 +76,15 @@ for python_version in "3.7" "3.8" "3.9-rc"; do
         fi
 
         echo "# Adding useful packages for the image" >>"${output_file}"
-        apt_install_packages ${output_file} "software-properties-common"
-        echo "RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y" >>"${output_file}"
+        # apt_install_packages ${output_file} "software-properties-common"
+        # echo "RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y" >>"${output_file}"
         apt_install_packages ${output_file} "${INSTALL_PACKAGES}"
 
         echo "" >>"${output_file}"
-        echo "# Making gcc 10 and g++ 10 default compiler" >>"${output_file}"
+        echo "# Making gcc 8 and g++ 8 default compiler" >>"${output_file}"
 
-        echo "RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10 \\" >>"${output_file}"
-        echo "&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 10 \\" >>"${output_file}"
+        echo "RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 10 \\" >>"${output_file}"
+        echo "&& update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 10 \\" >>"${output_file}"
         echo "&& update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 \\" >>"${output_file}"
         echo "&& update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 " >>"${output_file}"
         echo "" >>"${output_file}"
