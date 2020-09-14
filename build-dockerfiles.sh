@@ -76,6 +76,8 @@ for python_version in "3.7" "3.8" "3.9-rc"; do
         fi
 
         echo "# Adding useful packages for the image" >>"${output_file}"
+        apt_install_packages ${output_file} "software-properties-common"
+        echo "RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y" >>"${output_file}"
         apt_install_packages ${output_file} "${INSTALL_PACKAGES}"
 
         echo "" >>"${output_file}"

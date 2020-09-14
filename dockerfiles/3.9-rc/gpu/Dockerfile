@@ -180,6 +180,12 @@ RUN apt update \
 
 # Adding useful packages for the image
 RUN apt update \
+&& apt install software-properties-common -y --no-install-recommends \
+&& apt autoclean \
+&& apt clean \
+&& rm -rf /var/lib/apt/lists/*
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
+RUN apt update \
 && apt install gcc-10 g++-10 libgomp1 libopenblas-dev libomp-dev graphviz -y --no-install-recommends \
 && apt autoclean \
 && apt clean \
